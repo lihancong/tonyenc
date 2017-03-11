@@ -121,8 +121,8 @@ void tonyenc_encode(char *data, size_t len)
 
 void tonyenc_decode(char *data, size_t len)
 {
-    size_t p = 0;
-    for (size_t i = 0; i < len; ++i) {
+    size_t i, p = 0;
+    for (i = 0; i < len; ++i) {
         if (i & 1) {
             p += tonyenc_key[p] + i;
             p %= sizeof(tonyenc_key);
