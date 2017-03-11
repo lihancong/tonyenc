@@ -1,6 +1,6 @@
 ### 介绍
 
-一个高性能、跨平台的 PHP7 代码加密扩展，当前版本为 0.1.0
+一个简洁、高性能、跨平台的 PHP7 代码加密扩展，当前版本为 0.1.0
 
 ### 特点
 
@@ -25,7 +25,12 @@
 
 ### 在 Windows 上安装
 
-已经编译好了几种，可直接使用（需要 VC14 运行库）
+已编译好了以下几种，可直接使用（需要 VC14 运行库）：
+
+1. tonyenc.php70.x64.ts.dll
+2. tonyenc.php70.x64.nts.dll 
+3. tonyenc.php70.x86.ts.dll 
+4. tonyenc.php70.x86.nts.dll 
 
 手动编译待补充
 
@@ -37,6 +42,8 @@
 
 1. 加密 example.php 和 dir 目录下所有 php 文件：`php tonyenc.php example.php dir/`
 2. 解密 example.php 和 dir 目录下所有 php 文件：`php tonyenc.php -d example.php dir/`
+
+够简单吧！
 
 ### 版权
 
