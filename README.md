@@ -5,6 +5,7 @@
 ### 特点
 
 - 经实测，几乎不影响性能
+- 兼容 OPcache、Xdebug
 - 支持 Linux、macOS、Windows 等32/64位系统
 - 支持线程安全与非安全，支持命令行模式
 - 加密算法较简单，这是处于速度考虑，但仍不易解密(欢迎纠正)
@@ -15,35 +16,53 @@
 - PHP >= 7.0
 
 ### 在 Linux、macOS 上安装
-
-1. `git clone https://github.com/lihancong/tonyenc.git`
-2. `phpize`
-3. `./configure`
-4. `make`
-5. 将编译好的文件 `modules/tonyenc.so` 加入到 `php.ini` 配置，重启 PHP 服务即可
-
+```
+git clone https://github.com/lihancong/tonyenc.git
+phpize
+./configure
+4make
+将编译好的文件 modules/tonyenc.so 加入配置项 extension=beast.so ，重启 PHP 服务
+```
 
 ### 在 Windows 上安装
 
-已编译好了以下几种，可直接使用（需要 VC14 运行库）：
-
-1. tonyenc.php70.x64.ts.dll
-2. tonyenc.php70.x64.nts.dll 
-3. tonyenc.php70.x86.ts.dll 
-4. tonyenc.php70.x86.nts.dll 
-
-手动编译待补充
+已编译好了以下模块，可直接使用（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
+```
+tonyenc.php70.x64.ts.dll
+tonyenc.php70.x64.nts.dll 
+tonyenc.php70.x86.ts.dll 
+tonyenc.php70.x86.nts.dll 
+```
+手动编译的方法，待补充
 
 ### 如何加解密
 
-先将 php 加入系统环境变量
+在 core.h 中:
+```c
+/* 这里定制你的加密特征头，十六进制哦 */
+const u_char tonyenc_header[] = {
+        0x66, 0x88, 0xff, 0x4f,
+        0x68, 0x86, 0x00, 0x56,
+        0x11, 0x16, 0x16, 0x18,
+};
 
-代码中的 tonyenc.php 可以直接用来加解密:
+/* 这里指定密钥，不限定长度 */
+const u_char tonyenc_key[] = {
+        0x9f, 0x49, 0x52, 0x00,
+        0x58, 0x9f, 0xff, 0x21,
+        0x3e, 0xfe, 0xea, 0xfa,
+        0xa6, 0x33, 0xf3, 0xc6,
+};
+```
 
-1. 加密 example.php 和 dir 目录下所有 php 文件：`php tonyenc.php example.php dir/`
-2. 解密 example.php 和 dir 目录下所有 php 文件：`php tonyenc.php -d example.php dir/`
-
-够简单吧！
+代码中的 tonyenc.php 是加解密工具:
+```bash
+# 加密
+php tonyenc.php example.php dir/
+# 解密
+php tonyenc.php -d example.php dir/
+```
+这样即可加解密 `example.php` 和 `dir` 目录下的所有 php 文件，够简单吧！
 
 ### 版权
 
