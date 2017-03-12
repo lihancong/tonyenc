@@ -6,18 +6,16 @@
 
 - 经实测，几乎不影响性能
 - 兼容 OPcache、Xdebug 等其他扩展
-- 支持 Linux、macOS、Windows 等32/64位系统
-- 支持线程安全与非安全，支持命令行模式
+- 支持 Linux、macOS、Windows 等系统
+- 兼容 Apache、Nginx + PHP-fpm、命令行等运行模式
 - 加密算法较简单，这是处于速度考虑，但仍不易解密
 - 可只加密核心代码
-
-### 要求
-
-- PHP >= 7.0
+- 要求 PHP >= 7.0
 
 ### 在 Linux、macOS 上安装
 ```
 git clone https://github.com/lihancong/tonyenc.git
+cd tonyenc
 phpize
 ./configure
 make
@@ -29,13 +27,9 @@ make
 已编译好了以下模块，可直接使用（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
 ```bash
 # php7.0 64位 线程安全版
-tonyenc.php70.x64.ts.dll
+tonyenc-php70-ts-VC14-x64.dll
 # php7.0 64位 线程非安全版
-tonyenc.php70.x64.nts.dll
-# php7.0 32位 线程安全版
-tonyenc.php70.x86.ts.dll
-# php7.0 32位 线程非安全版
-tonyenc.php70.x86.nts.dll 
+tonyenc-php70-nts-VC14-x64.dll
 ```
 手动编译的方法，待补充
 

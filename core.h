@@ -81,7 +81,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, int *res)
 {
     char *p_data;
     size_t data_len;
-    int shadow[2] = {};
+    int shadow[2] = {0};
 
     data_len = stat_buf->st_size - sizeof(tonyenc_header);
     p_data = (char*)emalloc(data_len);
