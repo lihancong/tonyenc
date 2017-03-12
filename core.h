@@ -89,6 +89,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 {
     char *p_data;
     size_t data_len;
+    int shadow[2] = {0};
 
     data_len = stat_buf->st_size - sizeof(tonyenc_header);
     p_data = (char*)emalloc(data_len);
@@ -115,7 +116,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 	}
 	rewind(*res);
 #elif
-	int shadow[2] = { 0 };
+	int shadow[2] = {0};
 
     if (pipe(shadow)) {
         php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to open pipe, may be too many open files.\n");
