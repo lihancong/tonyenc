@@ -24,7 +24,7 @@ const u_char tonyenc_key[] = {
 
 #ifdef PHP_WIN32
 #	define TONYENC_RES FILE*
-#elif
+#else
 #	define TONYENC_RES int
 #endif
 
@@ -41,7 +41,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     zend_string *opened_path;
     struct stat stat_buf;
     int data_len;
-	TONYENC_RES res = NULL;
+	TONYENC_RES res = 0;
 
     /* FIXME: If in cli mode with no args */
     if (!strcmp(file_handle->filename, "-"))
@@ -71,10 +71,11 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     if (file_handle->type == ZEND_HANDLE_FP) fclose(file_handle->handle.fp);
     if (file_handle->type == ZEND_HANDLE_FD) close(file_handle->handle.fd);
 
-	file_handle->handle.fp = res;
 #ifdef PHP_WIN32
+    file_handle->handle.fp = res;
 	file_handle->type = ZEND_HANDLE_FP;
-#elif
+#else
+    file_handle->handle.fd = res;
     file_handle->type = ZEND_HANDLE_FD;
 #endif
     /*
@@ -89,7 +90,6 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 {
     char *p_data;
     size_t data_len;
-    int shadow[2] = {0};
 
     data_len = stat_buf->st_size - sizeof(tonyenc_header);
     p_data = (char*)emalloc(data_len);
@@ -115,7 +115,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 		return -2;
 	}
 	rewind(*res);
-#elif
+#else
 	int shadow[2] = {0};
 
     if (pipe(shadow)) {
