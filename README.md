@@ -29,13 +29,9 @@ make
 已编译好了以下模块，可直接使用（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
 ```bash
 # php7.0 64位 线程安全版
-tonyenc.php70.x64.ts.dll
+php_tonyenc.php70.x64.ts.dll
 # php7.0 64位 线程非安全版
-tonyenc.php70.x64.nts.dll
-# php7.0 32位 线程安全版
-tonyenc.php70.x86.ts.dll
-# php7.0 32位 线程非安全版
-tonyenc.php70.x86.nts.dll 
+php_tonyenc.php70.x64.nts.dll
 ```
 手动编译的方法，待补充
 
