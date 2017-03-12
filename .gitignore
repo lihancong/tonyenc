@@ -1,5 +1,6 @@
 *
 !.gitignore
+!windows
 !config.m4
 !config.w32
 !core.h
