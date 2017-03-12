@@ -1,0 +1,10 @@
+*
+!.gitignore
+!windows
+!config.m4
+!config.w32
+!core.h
+!php_tonyenc.h
+!tonyenc.c
+!tonyenc.php
+!README.md
