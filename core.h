@@ -22,9 +22,15 @@ const u_char tonyenc_key[] = {
 };
 
 
+#ifdef PHP_WIN32
+#	define TONYENC_RES FILE*
+#elif
+#	define TONYENC_RES int
+#endif
+
 zend_op_array *(*old_compile_file)(zend_file_handle*, int);
 zend_op_array *cgi_compile_file(zend_file_handle*, int);
-int tonyenc_ext_fopen(FILE*, struct stat*, int*);
+int tonyenc_ext_fopen(FILE*, struct stat*, TONYENC_RES*);
 void tonyenc_encode(char*, size_t);
 void tonyenc_decode(char*, size_t);
 
@@ -35,7 +41,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     zend_string *opened_path;
     struct stat stat_buf;
     int data_len;
-    int fd = 0;
+	TONYENC_RES res = NULL;
 
     /* FIXME: If in cli mode with no args */
     if (!strcmp(file_handle->filename, "-"))
@@ -59,16 +65,18 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
         }
         efree(t);
     }
-
-    if (tonyenc_ext_fopen(fp, &stat_buf, &fd))
+    if (tonyenc_ext_fopen(fp, &stat_buf, &res))
         goto final;
 
     if (file_handle->type == ZEND_HANDLE_FP) fclose(file_handle->handle.fp);
     if (file_handle->type == ZEND_HANDLE_FD) close(file_handle->handle.fd);
 
-    file_handle->handle.fd = fd;
+	file_handle->handle.fp = res;
+#ifdef PHP_WIN32
+	file_handle->type = ZEND_HANDLE_FP;
+#elif
     file_handle->type = ZEND_HANDLE_FD;
-
+#endif
     /*
      * zend_compile_file() would using the fd, so don't destroy it.
      */
@@ -77,7 +85,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
 }
 
 
-int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, int *res)
+int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 {
     char *p_data;
     size_t data_len;
@@ -91,24 +99,42 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, int *res)
 
     tonyenc_decode(p_data, data_len);
 
-    /* tmpfile() limits the number of calls, so we use pipe() */
+    
+#ifdef PHP_WIN32
+	/* FIXME: tmpfile_s() limits the number of calls, about to 2^32 in win7 */
+	if (tmpfile_s(res)) {
+		php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
+		efree(p_data);
+		return -1;
+	}
+
+	if (fwrite(p_data, data_len, 1, *res) != 1) {
+		php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
+		efree(p_data);
+		fclose(*res);
+		return -2;
+	}
+	rewind(*res);
+#elif
+	int shadow[2] = {0};
 
     if (pipe(shadow)) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Fail to open pipe, may be too many open files.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to open pipe, may be too many open files.\n");
         efree(p_data);
         return -1;
     }
     if (write(shadow[1], p_data, data_len) != data_len) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Fail to write pipe.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write pipe.\n");
         efree(p_data);
         close(shadow[1]);
         close(shadow[0]);
         return -2;
     }
+	close(shadow[1]);
+	*res = shadow[0];
+#endif
 
-    close(shadow[1]);
     efree(p_data);
-    *res = shadow[0];
 
     return SUCCESS;
 }

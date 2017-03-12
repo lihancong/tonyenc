@@ -27,11 +27,11 @@ make
 已编译好了以下模块，可直接使用（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
 ```bash
 # php7.0 64位 线程安全版
-tonyenc-php70-ts-VC14-x64.dll
+php_tonyenc_php70_ts_VC14_x64.dll
 # php7.0 64位 线程非安全版
-tonyenc-php70-nts-VC14-x64.dll
+php_tonyenc_php70_nts_VC14_x64.dll
 ```
-手动编译的方法，待补充
+如果没有你想要的，手动编译
 
 ### 如何加解密
 
