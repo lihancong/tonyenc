@@ -3,6 +3,7 @@
  *
  * @author:  Tony
  * @site:    lihancong.cn
+ * @github:  github.com/lihancong/tonyenc
  */
 
 /* Modify tonyenc_header to disguise your encrypt file */
