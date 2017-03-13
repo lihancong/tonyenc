@@ -4,7 +4,7 @@
 
 ### 特点
 
-- 编译前解密，简单快速，经实测,几乎不影响性能
+- 编译前解密，简单快速，经实测，几乎不影响性能
 - 兼容 OPcache、Xdebug 等其他扩展
 - 支持 Linux、macOS、Windows 等系统
 - 兼容 Apache、Nginx + PHP-fpm、命令行等运行模式
