@@ -41,7 +41,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     zend_string *opened_path;
     struct stat stat_buf;
     int data_len;
-	TONYENC_RES res = 0;
+    TONYENC_RES res = 0;
 
     /* FIXME: If in cli mode with no args */
     if (!strcmp(file_handle->filename, "-"))
@@ -73,7 +73,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
 
 #ifdef PHP_WIN32
     file_handle->handle.fp = res;
-	file_handle->type = ZEND_HANDLE_FP;
+    file_handle->type = ZEND_HANDLE_FP;
 #else
     file_handle->handle.fd = res;
     file_handle->type = ZEND_HANDLE_FD;
@@ -116,7 +116,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 	}
 	rewind(*res);
 #else
-	int shadow[2] = {0};
+    int shadow[2] = {0};
 
     if (pipe(shadow)) {
         php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to open pipe, may be too many open files.\n");
