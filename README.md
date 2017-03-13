@@ -4,11 +4,11 @@
 
 ### 特点
 
-- 经实测，几乎不影响性能
+- 编译前解密，简单快速，经实测,几乎不影响性能
 - 兼容 OPcache、Xdebug 等其他扩展
 - 支持 Linux、macOS、Windows 等系统
 - 兼容 Apache、Nginx + PHP-fpm、命令行等运行模式
-- 加密算法较简单，这是处于速度考虑，但仍不易解密
+- 加密算法较简单，这是出于速度考虑，但仍不易解密
 - 可只加密核心代码
 - 要求 PHP >= 7.0
 
@@ -24,18 +24,18 @@ make
 
 ### 在 Windows 上安装
 
-已编译好了以下模块，可直接使用（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
+已编译好了以下模块，可供测试（需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
 ```bash
 # php7.0 64位 线程安全版
 php_tonyenc_php70_ts_VC14_x64.dll
 # php7.0 64位 线程非安全版
 php_tonyenc_php70_nts_VC14_x64.dll
 ```
-如果没有你想要的，手动编译
+为保安全，要自己指定密钥：[手动编译方法](http://lihancong.cn/blog/article/104)
 
 ### 如何加解密
 
-在 core.h 中:
+编译前请在 core.h 中做如下修改:
 ```c
 /* 这里定制你的加密特征头，十六进制哦 */
 const u_char tonyenc_header[] = {
