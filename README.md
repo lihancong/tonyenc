@@ -9,7 +9,7 @@
 - 支持 Linux、macOS、Windows 等系统
 - 兼容 Apache、Nginx + PHP-fpm、命令行等运行模式
 - 加密算法较简单，这是出于速度考虑，但仍不易解密
-- 可只加密核心代码
+- 若项目的 php 文件很多，可只加密部分重要代码文件
 - 要求 PHP >= 7.0
 
 ## 安装
@@ -23,7 +23,7 @@ const u_char tonyenc_header[] = {
         0x11, 0x16, 0x16, 0x18,
 };
 
-/* 这里指定密钥，不限长度 */
+/* 这里指定密钥，长一些更安全 */
 const u_char tonyenc_key[] = {
         0x9f, 0x49, 0x52, 0x00,
         0x58, 0x9f, 0xff, 0x21,
