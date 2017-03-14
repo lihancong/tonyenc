@@ -74,7 +74,7 @@ PHP_FUNCTION(tonyenc_encode)
 }
 /* }}} */
 
-/* {{{ */
+/*
 PHP_FUNCTION(tonyenc_decode)
 {
     zend_string *strg;
@@ -83,7 +83,6 @@ PHP_FUNCTION(tonyenc_decode)
         return;
     }
 
-    /* If decoded */
     if (memcmp(ZSTR_VAL(strg), tonyenc_header, sizeof(tonyenc_header))) {
         RETURN_FALSE;
     }
@@ -95,7 +94,7 @@ PHP_FUNCTION(tonyenc_decode)
 
     RETURN_STR(zend_string_init(ZSTR_VAL(strg) + sizeof(tonyenc_header), len, 0));
 }
-/* }}} */
+*/
 
 /* {{{ php_tonyenc_init_globals
  */
@@ -179,7 +178,6 @@ PHP_MINFO_FUNCTION(tonyenc)
  */
 const zend_function_entry tonyenc_functions[] = {
 	PHP_FE(tonyenc_encode,	NULL)
-    PHP_FE(tonyenc_decode,	NULL)
 	PHP_FE_END	/* Must be the last line in tonyenc_functions[] */
 };
 /* }}} */

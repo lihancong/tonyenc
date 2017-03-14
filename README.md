@@ -54,16 +54,13 @@ php_tonyenc_php70_nts_VC14_x64.dll
 [手动编译方法](http://lihancong.cn/blog/article/104)
 
 
-## 加解密
+## 加密
 
-代码中的 `tonyenc.php` 是加解密工具:
+代码中的 `tonyenc.php` 是加密工具:
 ```bash
-# 加密
 php tonyenc.php example.php dir/
-# 解密
-php tonyenc.php -d example.php dir/
 ```
-这样即可加解密 `example.php` 和 `dir` 目录下的所有 php 文件，PHP 在运行它们时会自动解密，够简单吧！
+这样即可加密 `example.php` 和 `dir` 目录下的所有 php 文件，PHP 在运行它们时会自动解密，够简单吧！
 
 ## 版权
 
