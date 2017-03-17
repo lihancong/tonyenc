@@ -23,16 +23,17 @@ const u_char tonyenc_key[] = {
 
 
 #ifdef PHP_WIN32
-#	define TONYENC_RES FILE*
+#   define TONYENC_RES FILE*
 #else
-#	define TONYENC_RES int
+#   define TONYENC_RES int
 #endif
 
-zend_op_array *(*old_compile_file)(zend_file_handle*, int);
-zend_op_array *cgi_compile_file(zend_file_handle*, int);
-int tonyenc_ext_fopen(FILE*, struct stat*, TONYENC_RES*);
-void tonyenc_encode(char*, size_t);
-void tonyenc_decode(char*, size_t);
+zend_op_array *(*old_compile_file)(zend_file_handle *, int);
+zend_op_array *cgi_compile_file(zend_file_handle *, int);
+
+int tonyenc_ext_fopen(FILE *, struct stat *, TONYENC_RES *);
+void tonyenc_encode(char *, size_t);
+void tonyenc_decode(char *, size_t);
 
 
 zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
@@ -82,7 +83,8 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
      * zend_compile_file() would using the fd, so don't destroy it.
      */
 
-    final:return old_compile_file(file_handle, type);
+    final:
+    return old_compile_file(file_handle, type);
 }
 
 
@@ -92,29 +94,29 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
     size_t data_len;
 
     data_len = stat_buf->st_size - sizeof(tonyenc_header);
-    p_data = (char*)emalloc(data_len);
+    p_data = (char *) emalloc(data_len);
     fseek(fp, sizeof(tonyenc_header), SEEK_SET);
     fread(p_data, data_len, 1, fp);
     fclose(fp);
 
     tonyenc_decode(p_data, data_len);
 
-    
-#ifdef PHP_WIN32
-	/* FIXME: tmpfile_s() limits the number of calls, about to 2^32 in win7 */
-	if (tmpfile_s(res)) {
-		php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
-		efree(p_data);
-		return -1;
-	}
 
-	if (fwrite(p_data, data_len, 1, *res) != 1) {
-		php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
-		efree(p_data);
-		fclose(*res);
-		return -2;
-	}
-	rewind(*res);
+#ifdef PHP_WIN32
+    /* FIXME: tmpfile_s() limits the number of calls, about to 2^32 in win7 */
+    if (tmpfile_s(res)) {
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
+        efree(p_data);
+        return -1;
+    }
+
+    if (fwrite(p_data, data_len, 1, *res) != 1) {
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
+        efree(p_data);
+        fclose(*res);
+        return -2;
+    }
+    rewind(*res);
 #else
     int shadow[2] = {0};
 
@@ -130,8 +132,8 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
         close(shadow[0]);
         return -2;
     }
-	close(shadow[1]);
-	*res = shadow[0];
+    close(shadow[1]);
+    *res = shadow[0];
 #endif
 
     efree(p_data);

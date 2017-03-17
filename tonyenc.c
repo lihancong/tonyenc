@@ -52,11 +52,11 @@ PHP_INI_END()
 /* {{{ */
 PHP_FUNCTION(tonyenc_encode)
 {
-	zend_string *strg;
+    zend_string *strg;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &strg) == FAILURE) {
-		return;
-	}
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &strg) == FAILURE) {
+        return;
+    }
 
     /* If encoded */
     if (!memcmp(ZSTR_VAL(strg), tonyenc_header, sizeof(tonyenc_header))) {
@@ -70,7 +70,7 @@ PHP_FUNCTION(tonyenc_encode)
         memcpy(t + sizeof(tonyenc_header), ZSTR_VAL(strg), ZSTR_LEN(strg));
     }
 
-	RETURN_STR(zend_string_init(t, sizeof(tonyenc_header) + ZSTR_LEN(strg), 0));
+    RETURN_STR(zend_string_init(t, sizeof(tonyenc_header) + ZSTR_LEN(strg), 0));
 }
 /* }}} */
 
@@ -101,8 +101,8 @@ PHP_FUNCTION(tonyenc_decode)
 /* Uncomment this function if you have INI entries
 static void php_tonyenc_init_globals(zend_tonyenc_globals *tonyenc_globals)
 {
-	tonyenc_globals->global_value = 0;
-	tonyenc_globals->global_string = NULL;
+    tonyenc_globals->global_value = 0;
+    tonyenc_globals->global_string = NULL;
 }
 */
 /* }}} */
@@ -111,14 +111,14 @@ static void php_tonyenc_init_globals(zend_tonyenc_globals *tonyenc_globals)
  */
 PHP_MINIT_FUNCTION(tonyenc)
 {
-	/* If you have INI entries, uncomment these lines
-	REGISTER_INI_ENTRIES();
-	*/
+    /* If you have INI entries, uncomment these lines
+    REGISTER_INI_ENTRIES();
+    */
 
     old_compile_file = zend_compile_file;
     zend_compile_file = cgi_compile_file;
 
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -126,13 +126,13 @@ PHP_MINIT_FUNCTION(tonyenc)
  */
 PHP_MSHUTDOWN_FUNCTION(tonyenc)
 {
-	/* uncomment this line if you have INI entries
-	UNREGISTER_INI_ENTRIES();
-	*/
+    /* uncomment this line if you have INI entries
+    UNREGISTER_INI_ENTRIES();
+    */
 
     zend_compile_file = old_compile_file;
 
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -142,9 +142,9 @@ PHP_MSHUTDOWN_FUNCTION(tonyenc)
 PHP_RINIT_FUNCTION(tonyenc)
 {
 #if defined(COMPILE_DL_TONYENC) && defined(ZTS)
-	ZEND_TSRMLS_CACHE_UPDATE();
+    ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -153,7 +153,7 @@ PHP_RINIT_FUNCTION(tonyenc)
  */
 PHP_RSHUTDOWN_FUNCTION(tonyenc)
 {
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -161,14 +161,14 @@ PHP_RSHUTDOWN_FUNCTION(tonyenc)
  */
 PHP_MINFO_FUNCTION(tonyenc)
 {
-	php_info_print_table_start();
-	php_info_print_table_header(2, "tonyenc support", "enabled");
+    php_info_print_table_start();
+    php_info_print_table_header(2, "tonyenc support", "enabled");
     php_info_print_table_row(2, "Version", PHP_TONYENC_VERSION);
-	php_info_print_table_end();
+    php_info_print_table_end();
 
-	/* Remove comments if you have entries in php.ini
-	DISPLAY_INI_ENTRIES();
-	*/
+    /* Remove comments if you have entries in php.ini
+    DISPLAY_INI_ENTRIES();
+    */
 }
 /* }}} */
 
@@ -177,24 +177,24 @@ PHP_MINFO_FUNCTION(tonyenc)
  * Every user visible function must have an entry in tonyenc_functions[].
  */
 const zend_function_entry tonyenc_functions[] = {
-	PHP_FE(tonyenc_encode,	NULL)
-	PHP_FE_END	/* Must be the last line in tonyenc_functions[] */
+    PHP_FE(tonyenc_encode,	NULL)
+    PHP_FE_END	/* Must be the last line in tonyenc_functions[] */
 };
 /* }}} */
 
 /* {{{ tonyenc_module_entry
  */
 zend_module_entry tonyenc_module_entry = {
-	STANDARD_MODULE_HEADER,
-	"tonyenc",
-	tonyenc_functions,
-	PHP_MINIT(tonyenc),
-	PHP_MSHUTDOWN(tonyenc),
+    STANDARD_MODULE_HEADER,
+    "tonyenc",
+    tonyenc_functions,
+    PHP_MINIT(tonyenc),
+    PHP_MSHUTDOWN(tonyenc),
     NULL,   /* Replace with NULL if there's nothing to do at request start */
     NULL,	/* Replace with NULL if there's nothing to do at request end */
-	PHP_MINFO(tonyenc),
-	PHP_TONYENC_VERSION,
-	STANDARD_MODULE_PROPERTIES
+    PHP_MINFO(tonyenc),
+    PHP_TONYENC_VERSION,
+    STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
 

@@ -27,9 +27,9 @@ extern zend_module_entry tonyenc_module_entry;
 #define PHP_TONYENC_VERSION "0.1.1" /* Replace with version number for your extension */
 
 #ifdef PHP_WIN32
-#	define PHP_TONYENC_API __declspec(dllexport)
+#   define PHP_TONYENC_API __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#	define PHP_TONYENC_API __attribute__ ((visibility("default")))
+#   define PHP_TONYENC_API __attribute__ ((visibility("default")))
 #else
 #	define PHP_TONYENC_API
 #endif
@@ -40,11 +40,11 @@ extern zend_module_entry tonyenc_module_entry;
 
 /*
   	Declare any global variables you may need between the BEGIN
-	and END macros here:
+    and END macros here:
 
 ZEND_BEGIN_MODULE_GLOBALS(tonyenc)
-	zend_long  global_value;
-	char *global_string;
+    zend_long  global_value;
+    char *global_string;
 ZEND_END_MODULE_GLOBALS(tonyenc)
 */
 
