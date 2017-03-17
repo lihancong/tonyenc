@@ -31,7 +31,7 @@ extern zend_module_entry tonyenc_module_entry;
 #elif defined(__GNUC__) && __GNUC__ >= 4
 #   define PHP_TONYENC_API __attribute__ ((visibility("default")))
 #else
-#	define PHP_TONYENC_API
+#   define PHP_TONYENC_API
 #endif
 
 #ifdef ZTS
@@ -39,7 +39,7 @@ extern zend_module_entry tonyenc_module_entry;
 #endif
 
 /*
-  	Declare any global variables you may need between the BEGIN
+    Declare any global variables you may need between the BEGIN
     and END macros here:
 
 ZEND_BEGIN_MODULE_GLOBALS(tonyenc)
