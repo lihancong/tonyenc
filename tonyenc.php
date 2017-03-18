@@ -18,7 +18,7 @@ if (php_sapi_name() !== 'cli')
 if (!extension_loaded('tonyenc'))
     die("The extension: 'tonyenc' not loaded\n");
 if ($argc <= 1)
-    die("usage: php tonyenc.php file.php ...     encrypt the php file(s) or directory(s)\n");
+    die("\nusage: php tonyenc.php file.php ...     encrypt the php file(s) or directory(s)\n\n");
 
 
 

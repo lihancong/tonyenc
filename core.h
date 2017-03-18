@@ -144,7 +144,15 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
 
 void tonyenc_encode(char *data, size_t len)
 {
-    tonyenc_decode(data, len);
+    size_t i, p = 0;
+    for (i = 0; i < len; ++i) {
+        if (i & 1) {
+            p += tonyenc_key[p] + i;
+            p %= sizeof(tonyenc_key);
+            u_char t = tonyenc_key[p];
+            data[i] = ~(data[i] ^ t);
+        }
+    }
 }
 
 
@@ -156,7 +164,7 @@ void tonyenc_decode(char *data, size_t len)
             p += tonyenc_key[p] + i;
             p %= sizeof(tonyenc_key);
             u_char t = tonyenc_key[p];
-            data[i] ^= t;
+            data[i] = ~data[i] ^ t;
         }
     }
 }
