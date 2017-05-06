@@ -29,8 +29,8 @@ foreach ($argv as $fileName) {
     } elseif (is_dir($fileName)) {
         $DirectoriesIt = new RecursiveDirectoryIterator($fileName, FilesystemIterator::SKIP_DOTS);
         $AllIt         = new RecursiveIteratorIterator($DirectoriesIt);
-        $It            = new RegexIterator($AllIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
-        foreach ($It as $v)
+        $it            = new RegexIterator($AllIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+        foreach ($it as $v)
             handle($v[0]);
     } else {
         echo "Unknowing file: '$fileName'\n";

@@ -12,7 +12,7 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Tony  lihancong.cn   github.com/lihancong/tonyenc            |
+  | Author: Tony   lihancong.cn   github.com/lihancong/tonyenc           |
   +----------------------------------------------------------------------+
 */
 
@@ -24,7 +24,7 @@
 extern zend_module_entry tonyenc_module_entry;
 #define phpext_tonyenc_ptr &tonyenc_module_entry
 
-#define PHP_TONYENC_VERSION "0.1.1" /* Replace with version number for your extension */
+#define PHP_TONYENC_VERSION "0.1.3" /* Replace with version number for your extension */
 
 #ifdef PHP_WIN32
 #   define PHP_TONYENC_API __declspec(dllexport)

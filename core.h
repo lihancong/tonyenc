@@ -29,10 +29,13 @@ const u_char tonyenc_key[] = {
 #endif
 
 zend_op_array *(*old_compile_file)(zend_file_handle *, int);
+
 zend_op_array *cgi_compile_file(zend_file_handle *, int);
 
-int tonyenc_ext_fopen(FILE *, struct stat *, TONYENC_RES *);
+int tonyenc_ext_fopen(FILE *, struct stat *, TONYENC_RES *, const char *);
+
 void tonyenc_encode(char *, size_t);
+
 void tonyenc_decode(char *, size_t);
 
 
@@ -66,7 +69,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
         }
         efree(t);
     }
-    if (tonyenc_ext_fopen(fp, &stat_buf, &res))
+    if (tonyenc_ext_fopen(fp, &stat_buf, &res, file_handle->filename))
         goto final;
 
     if (file_handle->type == ZEND_HANDLE_FP) fclose(file_handle->handle.fp);
@@ -79,6 +82,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     file_handle->handle.fd = res;
     file_handle->type = ZEND_HANDLE_FD;
 #endif
+
     /*
      * zend_compile_file() would using the fd, so don't destroy it.
      */
@@ -88,10 +92,11 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
 }
 
 
-int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
+int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res, const char *file_name)
 {
     char *p_data;
     size_t data_len;
+    size_t write_len;
 
     data_len = stat_buf->st_size - sizeof(tonyenc_header);
     p_data = (char *) emalloc(data_len);
@@ -121,17 +126,28 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res)
     int shadow[2] = {0};
 
     if (pipe(shadow)) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to open pipe, may be too many open files.\n");
+        php_error_docref(
+                NULL, E_CORE_ERROR,
+                "tonyenc: Failed to open pipe, may be too many open files.\nError in file: %s\n",
+                file_name
+        );
         efree(p_data);
         return -1;
     }
-    if (write(shadow[1], p_data, data_len) != data_len) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write pipe.\n");
+
+    write_len = write(shadow[1], p_data, data_len);
+    if (write_len != data_len) {
+        php_error_docref(
+                NULL, E_CORE_ERROR,
+                "tonyenc: Failed to write pipe. %d Byte expected, but %d Byte actually.\nError in file: %s\n",
+                data_len, write_len, file_name
+        );
         efree(p_data);
         close(shadow[1]);
         close(shadow[0]);
         return -2;
     }
+
     close(shadow[1]);
     *res = shadow[0];
 #endif
