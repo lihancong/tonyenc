@@ -60,7 +60,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     data_len = stat_buf.st_size;
     if (data_len >= sizeof(tonyenc_header)) {
         char *t = emalloc(sizeof(tonyenc_header));
-        fread(t, sizeof(tonyenc_header), 1, fp);
+        size_t read_cnt = fread(t, sizeof(tonyenc_header), 1, fp);
         /* If not the encoded file */
         if (memcmp(t, tonyenc_header, sizeof(tonyenc_header))) {
             efree(t);

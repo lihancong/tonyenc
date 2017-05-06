@@ -40,11 +40,11 @@ phpize
 ./configure
 make
 ```
-将编译好的文件 modules/tonyenc.so 加入到配置项 extension=tonyenc.so ，重启 PHP 服务
+将编译好的文件 modules/tonyenc.so 加入到配置项 extension=tonyenc.so，重启 PHP 服务
 
 #### 在 Windows 上编译
 
-已编译了以下模块，可供测试（这里的密钥与源代码中的不同，需要 [VC14](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 运行库）:
+已编译了以下模块，可供测试（这里的密钥与源代码中的不同，需要安装有 [VC14 运行库](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145)）:
 ```bash
 # php7.0 64位 线程安全版
 php_tonyenc_php70_ts_VC14_x64.dll
