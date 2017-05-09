@@ -25,7 +25,7 @@ const u_char tonyenc_key[] = {
 #ifdef PHP_WIN32
 #   define TONYENC_RES FILE*
 #else
-#   define TONYENC_RES int
+#   define TONYENC_RES FILE*
 #endif
 
 zend_op_array *(*old_compile_file)(zend_file_handle *, int);
@@ -79,12 +79,13 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     file_handle->handle.fp = res;
     file_handle->type = ZEND_HANDLE_FP;
 #else
-    file_handle->handle.fd = res;
-    file_handle->type = ZEND_HANDLE_FD;
+    /* TODO: pipe() limits to buf size, so we can't use it. */
+    file_handle->handle.fp = res;
+    file_handle->type = ZEND_HANDLE_FP;
 #endif
 
     /*
-     * zend_compile_file() would using the fd, so don't destroy it.
+     * zend_compile_file() would using the fp, so don't destroy it.
      */
 
     final:
@@ -108,7 +109,7 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res, const c
 
 
 #ifdef PHP_WIN32
-    /* FIXME: tmpfile_s() limits the number of calls, about to 2^32 in win7 */
+    /* tmpfile_s() limits the number of calls, about to 2^32 in win7 */
     if (tmpfile_s(res)) {
         php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
         efree(p_data);
@@ -123,33 +124,21 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res, const c
     }
     rewind(*res);
 #else
-    int shadow[2] = {0};
-
-    if (pipe(shadow)) {
-        php_error_docref(
-                NULL, E_CORE_ERROR,
-                "tonyenc: Failed to open pipe, may be too many open files.\nError in file: %s\n",
-                file_name
-        );
+    /* tmpfile() limits the number of calls, about to 2^32 in Linux */
+    *res = tmpfile();
+    if (*res == NULL) {
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
         efree(p_data);
         return -1;
     }
 
-    write_len = write(shadow[1], p_data, data_len);
-    if (write_len != data_len) {
-        php_error_docref(
-                NULL, E_CORE_ERROR,
-                "tonyenc: Failed to write pipe. %d Byte expected, but %d Byte actually.\nError in file: %s\n",
-                data_len, write_len, file_name
-        );
+    if (fwrite(p_data, data_len, 1, *res) != 1) {
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
         efree(p_data);
-        close(shadow[1]);
-        close(shadow[0]);
+        fclose(*res);
         return -2;
     }
-
-    close(shadow[1]);
-    *res = shadow[0];
+    rewind(*res);
 #endif
 
     efree(p_data);
