@@ -50,6 +50,13 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     /* FIXME: If in cli mode with no args */
     if (!strcmp(file_handle->filename, "-"))
         goto final;
+
+    /* Skip if phar */
+    int size_phar = sizeof("phar") - 1;
+    if (strlen(file_handle->filename) > size_phar && !memcmp(file_handle->filename, "phar", size_phar)) {
+        goto final;
+    }
+
     if (file_handle->filename) {
         fp = zend_fopen(file_handle->filename, &opened_path);
         if (fp == NULL)
@@ -79,14 +86,12 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     file_handle->handle.fp = res;
     file_handle->type = ZEND_HANDLE_FP;
 #else
-    /* TODO: pipe() limits to buf size, so we can't use it. */
+    /* pipe() limits to buf size, so we can't use it. */
     file_handle->handle.fp = res;
     file_handle->type = ZEND_HANDLE_FP;
 #endif
 
-    /*
-     * zend_compile_file() would using the fp, so don't destroy it.
-     */
+    /* zend_compile_file() would using the fp, so don't destroy it. */
 
     final:
     return old_compile_file(file_handle, type);
@@ -111,13 +116,13 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res, const c
 #ifdef PHP_WIN32
     /* tmpfile_s() limits the number of calls, about to 2^32 in win7 */
     if (tmpfile_s(res)) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create temp file, may be too many open files.\n");
         efree(p_data);
         return -1;
     }
 
     if (fwrite(p_data, data_len, 1, *res) != 1) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write temp file.\n");
         efree(p_data);
         fclose(*res);
         return -2;
@@ -127,13 +132,13 @@ int tonyenc_ext_fopen(FILE *fp, struct stat *stat_buf, TONYENC_RES *res, const c
     /* tmpfile() limits the number of calls, about to 2^32 in Linux */
     *res = tmpfile();
     if (*res == NULL) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create tmpfile, may be too many open files.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to create temp file, may be too many open files.\n");
         efree(p_data);
         return -1;
     }
 
     if (fwrite(p_data, data_len, 1, *res) != 1) {
-        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write tmpfile.\n");
+        php_error_docref(NULL, E_CORE_ERROR, "tonyenc: Failed to write temp file.\n");
         efree(p_data);
         fclose(*res);
         return -2;

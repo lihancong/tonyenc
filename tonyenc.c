@@ -162,7 +162,7 @@ PHP_RSHUTDOWN_FUNCTION(tonyenc)
 PHP_MINFO_FUNCTION(tonyenc)
 {
     php_info_print_table_start();
-    php_info_print_table_header(2, "tonyenc support", "enabled");
+    php_info_print_table_header(2, "Tonyenc Support", "enabled");
     php_info_print_table_row(2, "Version", PHP_TONYENC_VERSION);
     php_info_print_table_row(2, "Open Sourced By", "lihancong.cn");
     php_info_print_table_end();
