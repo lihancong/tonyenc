@@ -62,6 +62,10 @@ php tonyenc.php example.php dir/
 ```
 这样即可加密 `example.php` 和 `dir` 目录下的所有 php 文件，PHP 在运行它们时会自动解密，够简单吧！
 
+## 下一步
+
+有时间的时候把加密方式改成导出为为 OPcache
+
 ## 版权
 
 允许转载、修改、商用，请注明原作者及网址：Tony (http://lihancong.cn/)
