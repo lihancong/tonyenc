@@ -64,7 +64,7 @@ php tonyenc.php example.php dir/
 
 ## 下一步
 
-有时间的时候把加密方式改成导出为为 OPcache
+有时间的时候把加密方式改为加密成 OPcache 文件
 
 ## 版权
 
