@@ -75,6 +75,9 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
             goto final;
         }
         efree(t);
+    } else {
+        fclose(fp);
+        goto final;
     }
     if (tonyenc_ext_fopen(fp, &stat_buf, &res, file_handle->filename))
         goto final;
