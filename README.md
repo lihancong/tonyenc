@@ -66,6 +66,6 @@ php tonyenc.php example.php dir/
 
 ## 版权
 
-允许转载、修改、商用，请注明原作者及网址：Tony (http://lihancong.cn/)
+允许转载、修改、商用，请注明原作者及网址：Tony (http://htmln.com/)
 
 这是我开发的第一个扩展，如有不足欢迎指正 :)
