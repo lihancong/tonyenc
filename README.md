@@ -12,6 +12,8 @@
 - 若项目的 php 文件很多，建议只加密部分重要代码文件
 - 要求 PHP >= 7.0
 
+**加密前记得备份!!!**
+
 ## 安装
 
 编译前请在 core.h 中做如下修改:
@@ -61,10 +63,6 @@ php_tonyenc_php70_nts_VC14_x64.dll
 php tonyenc.php example.php dir/
 ```
 这样即可加密 `example.php` 和 `dir` 目录下的所有 php 文件，PHP 在运行它们时会自动解密，够简单吧！
-
-## 下一步
-
-有时间的时候把加密方式改为加密成 OPcache 文件
 
 ## 版权
 
