@@ -2,10 +2,11 @@
 !.gitignore
 !windows-dlls/*
 !windows-dlls/
+!tests/
+!tests/*
 !config.m4
 !core.h
 !php_tonyenc.h
 !tonyenc.c
 !tonyenc.php
 !README.md
-!tests/*
