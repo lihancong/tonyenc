@@ -42,7 +42,6 @@ void tonyenc_decode(char *, size_t);
 zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
 {
     FILE *fp;
-    zend_string *opened_path;
     struct stat stat_buf;
     int data_len;
     TONYENC_RES res = 0;
@@ -58,7 +57,8 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     }
 
     if (file_handle->filename) {
-        fp = zend_fopen(file_handle->filename, &opened_path);
+    	 char *file_path = ZSTR_VAL(file_handle->opened_path);
+        fp = fopen(file_path, "r");
         if (fp == NULL)
             goto final;
     }
