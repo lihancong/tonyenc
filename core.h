@@ -57,7 +57,7 @@ zend_op_array *cgi_compile_file(zend_file_handle *file_handle, int type)
     }
 
     if (file_handle->filename) {
-    	 char *file_path = ZSTR_VAL(file_handle->opened_path);
+    	char *file_path = ZSTR_VAL(file_handle->opened_path);
         fp = fopen(file_path, "r");
         if (fp == NULL)
             goto final;
