@@ -1,6 +1,6 @@
 ## 介绍
 
-一个简洁、高性能、跨平台的 PHP7 代码加密扩展，当前版本为 0.2.2
+一个简洁、高性能、跨平台的 PHP7 代码加密扩展，当前版本为 0.2.3
 
 ## 特点
 
@@ -53,7 +53,7 @@ php_tonyenc_php70_ts_VC14_x64.dll
 # php7.0 64位 线程非安全版
 php_tonyenc_php70_nts_VC14_x64.dll
 ```
-[手动编译方法](http://lihancong.cn/blog/article/104)
+手动编译方法见 issues
 
 
 ## 加密
